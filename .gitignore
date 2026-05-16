@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Builds
+/dist
+/build
+/.vite
+/.nuxt
+
+# Environment
+.env*
+!.env.example
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Packages
+*.tar.gz
+*.zip
+
+# Node.js
+coverage/
+.nyc_output
+
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV
+.spyproject
