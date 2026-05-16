@@ -355,3 +355,119 @@ const goHome = () => {
   background-color: #7f8c8d;
 }
 </style>
+```
+
+```
+<template>
+  <div class="customers">
+    <h1>Customer Management</h1>
+    
+    <div v-if="loading" class="loading">Loading customers...</div>
+    
+    <div v-else>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Company</th>
+            <th>Purchase History</th>
+            <th>Last Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="customer in customers" :key="customer.id">
+            <td>{{ customer.id }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.company }}</td>
+            <td>{{ customer.purchaseHistory.join(', ') }}</td>
+            <td>{{ customer.lastContact }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+
+interface Customer {
+  id: number;
+  name: string;
+  email: string;
+  company: string;
+  purchaseHistory: string[];
+  lastContact: string;
+}
+
+const customers = ref<Customer[]>([]);
+
+const loading = ref(true);
+
+onMounted(async () => {
+  // 模拟加载数据
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  customers.value = [
+    {
+      id: 1,
+      name: 'John Smith',
+      email: 'john@example.com',
+      company: 'ABC Corp',
+      purchaseHistory: ['Product A', 'Service B'],
+      lastContact: '2023-05-15'
+    },
+    {
+      id: 2,
+      name: 'Sarah Johnson',
+      email: 'sarah@example.com',
+      company: 'XYZ Ltd',
+      purchaseHistory: ['Product C'],
+      lastContact: '2023-06-20'
+    },
+    {
+      id: 3,
+      name: 'Michael Brown',
+      email: 'michael@example.com',
+      company: 'Tech Inc',
+      purchaseHistory: ['Service A', 'Product B', 'Product D'],
+      lastContact: '2023-07-10'
+    }
+  ];
+  
+  loading.value = false;
+});
+</script>
+
+<style scoped>
+.customers {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 50px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+</style>

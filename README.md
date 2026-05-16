@@ -1,107 +1,93 @@
 # Sales Lead Agent
 
-一个AI驱动的销售线索管理平台，帮助销售人员更有效地跟踪潜在客户、生成销售话术并跟进销售机会。
+A sales lead management application built with Vue 3, TypeScript, and Python Flask backend.
 
-## 功能特性
+## Features
 
-- 1:1 复刻首页，包含数据卡片、快捷按钮和底部对话窗口
-- 点击卡片跳转到【标讯列表页】和【客户列表页】二级页面
-- 点击数据自动在对话窗口生成销售跟进话术
-- AI驱动的销售建议和客户分析
+- Lead management dashboard
+- Customer management system
+- AI-powered sales assistance (when deployed with backend)
+- Responsive UI with Vue 3 and TypeScript
 
-## 技术栈
+## Deployment
 
-- 前端: Vue 3 + TypeScript + Vue Router
-- 后端: Python Flask
-- AI逻辑: Python销售代理模块
+This project can be deployed using GitHub Pages as a static site:
 
-## 项目结构
+1. Build the project:
+   ```bash
+   npm run build
+   ```
 
-```
-├── src/                    # 前端源码目录
-│   ├── assets/             # 静态资源
-│   ├── components/         # Vue组件
-│   ├── views/              # 页面视图
-│   ├── router/             # 路由配置
-│   └── main.ts             # 入口文件
-├── skill/                  # AI技能模块
-│   ├── SKILL.md            # 技能文档
-│   └── sales_agent.py      # 销售代理核心逻辑
-├── server.py               # Python后端服务器
-├── requirements.txt        # Python依赖
-├── package.json            # 前端依赖
-├── vite.config.ts          # 构建配置
-└── README.md               # 项目说明
-```
+2. Push the built files to the `gh-pages` branch:
+   ```bash
+   git add .
+   git commit -m "Build for deployment"
+   git subtree push --prefix dist origin gh-pages
+   ```
 
-## 安装和运行
+3. In your GitHub repository:
+   - Go to Settings
+   - Click on "Pages" in the left sidebar
+   - Select "Deploy from a branch"
+   - Choose "gh-pages" branch and "/ (root)" folder
+   - Click "Save"
 
-### 前提条件
+4. Your app will be available at:
+   ```
+   https://zijun13.github.io/sales-lead-agent/
+   ```
 
-- Node.js (>=16.x)
-- Python (>=3.8)
+## Local Development
 
-### 安装步骤
+### Frontend Setup
 
-1. 克隆项目
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```bash
-git clone <your-repo-url>
-cd sales-lead-agent
-```
+2. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-2. 安装前端依赖
+3. Open `http://localhost:3000` in your browser.
 
-```bash
-npm install
-```
+### Backend Setup (Optional for local development)
 
-3. 安装后端依赖
+1. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   ```
 
-```bash
-pip install -r requirements.txt
-```
+2. Activate the virtual environment:
+   - On Windows:
+     ```
+     venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```
+     source venv/bin/activate
+     ```
 
-### 运行项目
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-1. 启动后端服务器
+4. Run the server:
+   ```bash
+   python server.py
+   ```
 
-```bash
-python server.py
-```
+5. The backend will be running at `http://localhost:8000`.
 
-2. 在另一个终端启动前端开发服务器
+## Architecture
 
-```bash
-npm run dev
-```
+- Frontend: Vue 3 with TypeScript, Vite, Vue Router
+- Backend: Python Flask API
+- AI Skills: Python modules implementing sales agent capabilities
 
-3. 访问 http://localhost:3000 查看应用
+## Notes
 
-## 部署
-
-### 构建生产版本
-
-```bash
-npm run build
-```
-
-## API 接口
-
-- `POST /api/generate-talk`: 生成销售话术
-- `POST /api/analyze-needs`: 分析客户需求
-- `POST /api/suggest-action`: 建议下一步行动
-- `GET /health`: 健康检查
-
-## 开发指南
-
-此项目遵循以下开发原则：
-
-- 使用TypeScript确保代码质量和可维护性
-- 组件化开发，便于复用和测试
-- API调用统一处理错误情况
-- 响应式设计适配不同屏幕尺寸
-
-## 许可证
-
-MIT
+Since this is deployed as a static site on GitHub Pages, the backend API functionality is disabled. The frontend uses simulated data for demonstration purposes.

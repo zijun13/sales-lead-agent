@@ -319,3 +319,178 @@ const goHome = () => {
   background-color: #7f8c8d;
 }
 </style>
+```
+
+```
+<template>
+  <div class="leads">
+    <h1>Lead Management</h1>
+    
+    <div v-if="loading" class="loading">Loading leads...</div>
+    
+    <div v-else>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Source</th>
+            <th>Date Added</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="lead in leads" :key="lead.id">
+            <td>{{ lead.id }}</td>
+            <td>{{ lead.name }}</td>
+            <td>{{ lead.email }}</td>
+            <td>{{ lead.company }}</td>
+            <td><span class="status" :class="lead.status">{{ lead.status }}</span></td>
+            <td>{{ lead.source }}</td>
+            <td>{{ lead.dateAdded }}</td>
+            <td>
+              <select @change="updateStatus(lead.id, ($event.target as HTMLSelectElement).value as any)" :value="lead.status">
+                <option value="new">New</option>
+                <option value="contacted">Contacted</option>
+                <option value="qualified">Qualified</option>
+                <option value="lost">Lost</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+
+interface Lead {
+  id: number;
+  name: string;
+  email: string;
+  company: string;
+  status: 'new' | 'contacted' | 'qualified' | 'lost';
+  source: string;
+  dateAdded: string;
+}
+
+const leads = ref<Lead[]>([]);
+const loading = ref(true);
+
+onMounted(async () => {
+  // 模拟加载数据
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  leads.value = [
+    {
+      id: 1,
+      name: 'John Smith',
+      email: 'john@example.com',
+      company: 'ABC Corp',
+      status: 'new',
+      source: 'Website',
+      dateAdded: '2023-05-15'
+    },
+    {
+      id: 2,
+      name: 'Sarah Johnson',
+      email: 'sarah@example.com',
+      company: 'XYZ Ltd',
+      status: 'contacted',
+      source: 'Referral',
+      dateAdded: '2023-06-20'
+    },
+    {
+      id: 3,
+      name: 'Michael Brown',
+      email: 'michael@example.com',
+      company: 'Tech Inc',
+      status: 'qualified',
+      source: 'Trade Show',
+      dateAdded: '2023-07-10'
+    },
+    {
+      id: 4,
+      name: 'Emily Davis',
+      email: 'emily@example.com',
+      company: 'Innovate Co',
+      status: 'lost',
+      source: 'Social Media',
+      dateAdded: '2023-07-22'
+    }
+  ];
+  
+  loading.value = false;
+});
+
+const updateStatus = (leadId: number, newStatus: 'new' | 'contacted' | 'qualified' | 'lost') => {
+  const lead = leads.value.find(l => l.id === leadId);
+  if (lead) {
+    lead.status = newStatus;
+  }
+};
+</script>
+
+<style scoped>
+.leads {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 50px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.8em;
+}
+
+.status.new {
+  background-color: #42b983;
+}
+
+.status.contacted {
+  background-color: #6baeff;
+}
+
+.status.qualified {
+  background-color: #ffa500;
+}
+
+.status.lost {
+  background-color: #e74c3c;
+}
+
+select {
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+</style>
