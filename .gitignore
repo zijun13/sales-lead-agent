@@ -1,46 +1,19 @@
-# Dependencies
-node_modules/
-__pycache__/
-*.pyc
-.pytest_cache/
-
-# Builds
-/dist
-/build
-/.vite
-/.nuxt
-
-# Environment
-.env*
-!.env.example
-
-# Logs
-*.log
-
-# OS
+node_modules
+dist
 .DS_Store
-Thumbs.db
-
-# IDE
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage
+*.lcov
+.nyc_output
+coverage/
+lib-cov/
 .vscode
 .idea
-*.swp
-*.swo
-
-# Packages
-*.tar.gz
-*.zip
-
-# Node.js
-coverage/
-.nyc_output
-
-# Python
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV
-.spyproject
+*.local
+logs
+*.log
+npm-shrinkwrap.json
+package-lock.json
