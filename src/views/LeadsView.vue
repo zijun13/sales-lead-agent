@@ -99,21 +99,11 @@ const leadsData = ref<Lead[]>([
     id: 4,
     title: "零售业数据分析系统",
     company: "某连锁零售企业",
-    description: "构建客户行为分析和销售预测系统，优化供应链管理。",
+    description: "开发定制化的数据分析系统，用于分析顾客购买行为和库存优化。",
     date: new Date(2023, 8, 22),
-    status: "new",
-    statusText: "新线索",
-    budget: "150万"
-  },
-  {
-    id: 5,
-    title: "医疗行业患者管理系统",
-    company: "某医院集团",
-    description: "开发患者预约、病历管理和电子处方系统，提升就医体验。",
-    date: new Date(2023, 8, 25),
     status: "closed",
     statusText: "已关闭",
-    budget: "400万"
+    budget: "150万"
   }
 ])
 
@@ -123,7 +113,7 @@ const filterStatus = ref('')
 const filteredLeads = computed(() => {
   return leadsData.value.filter(lead => {
     const matchesSearch = lead.title.toLowerCase().includes(searchTerm.value.toLowerCase()) || 
-                          lead.company.toLowerCase().includes(searchTerm.value.toLowerCase())
+                         lead.company.toLowerCase().includes(searchTerm.value.toLowerCase())
     const matchesStatus = !filterStatus.value || lead.status === filterStatus.value
     return matchesSearch && matchesStatus
   })
@@ -139,7 +129,7 @@ const selectLead = (lead: Lead) => {
 }
 
 const generateFollowUp = (lead: Lead) => {
-  alert(`为 "${lead.title}" 生成销售跟进话术:\n\n您好，看到贵公司有"${lead.title}"的需求，我们在这方面有丰富的经验，可以为您提供专业的解决方案。是否方便安排时间详细沟通一下？`)
+  alert(`为 "${lead.title}" 生成销售跟进话术:\n\n您好，我了解到贵公司发布了 "${lead.title}" 项目，我们在此领域有丰富的经验，已完成多个类似项目。是否方便安排时间详细介绍我们的解决方案？`)
 }
 
 const goHome = () => {
@@ -172,13 +162,14 @@ const goHome = () => {
   gap: 15px;
   margin-bottom: 25px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .search-input {
   padding: 10px 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  width: 300px;
+  width: 250px;
   font-size: 1rem;
 }
 
@@ -213,21 +204,21 @@ const goHome = () => {
 }
 
 .lead-info h3 {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   color: #2c3e50;
   font-size: 1.3rem;
 }
 
 .lead-info .company {
-  font-weight: bold;
   color: #3498db;
-  margin: 0 0 10px;
+  font-weight: bold;
+  margin: 0 0 8px;
 }
 
 .lead-info .details {
   color: #7f8c8d;
   margin: 0 0 15px;
-  line-height: 1.5;
+  font-size: 0.95rem;
 }
 
 .meta {
@@ -243,38 +234,38 @@ const goHome = () => {
 }
 
 .meta .date {
-  background-color: #ecf0f1;
-  color: #7f8c8d;
+  background-color: #e1f5fe;
+  color: #0277bd;
 }
 
 .meta .status {
-  background-color: #eaf5fb;
-  color: #3498db;
+  background-color: #e8f5e9;
+  color: #2e7d32;
 }
 
 .meta .status.new {
-  background-color: #fff8e1;
-  color: #ff8f00;
+  background-color: #e8f5e9;
+  color: #2e7d32;
 }
 
 .meta .status.contacted {
-  background-color: #e8f5e9;
-  color: #4caf50;
+  background-color: #e3f2fd;
+  color: #1565c0;
 }
 
 .meta .status.qualified {
-  background-color: #e3f2fd;
-  color: #2196f3;
+  background-color: #fff8e1;
+  color: #f57f17;
 }
 
 .meta .status.closed {
   background-color: #ffebee;
-  color: #f44336;
+  color: #c62828;
 }
 
 .meta .budget {
   background-color: #f3e5f5;
-  color: #9c27b0;
+  color: #7b1fa2;
 }
 
 .lead-actions {
@@ -317,180 +308,5 @@ const goHome = () => {
 
 .back-btn:hover {
   background-color: #7f8c8d;
-}
-</style>
-```
-
-```
-<template>
-  <div class="leads">
-    <h1>Lead Management</h1>
-    
-    <div v-if="loading" class="loading">Loading leads...</div>
-    
-    <div v-else>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Company</th>
-            <th>Status</th>
-            <th>Source</th>
-            <th>Date Added</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="lead in leads" :key="lead.id">
-            <td>{{ lead.id }}</td>
-            <td>{{ lead.name }}</td>
-            <td>{{ lead.email }}</td>
-            <td>{{ lead.company }}</td>
-            <td><span class="status" :class="lead.status">{{ lead.status }}</span></td>
-            <td>{{ lead.source }}</td>
-            <td>{{ lead.dateAdded }}</td>
-            <td>
-              <select @change="updateStatus(lead.id, ($event.target as HTMLSelectElement).value as any)" :value="lead.status">
-                <option value="new">New</option>
-                <option value="contacted">Contacted</option>
-                <option value="qualified">Qualified</option>
-                <option value="lost">Lost</option>
-              </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref, onMounted } from 'vue';
-
-interface Lead {
-  id: number;
-  name: string;
-  email: string;
-  company: string;
-  status: 'new' | 'contacted' | 'qualified' | 'lost';
-  source: string;
-  dateAdded: string;
-}
-
-const leads = ref<Lead[]>([]);
-const loading = ref(true);
-
-onMounted(async () => {
-  // 模拟加载数据
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  leads.value = [
-    {
-      id: 1,
-      name: 'John Smith',
-      email: 'john@example.com',
-      company: 'ABC Corp',
-      status: 'new',
-      source: 'Website',
-      dateAdded: '2023-05-15'
-    },
-    {
-      id: 2,
-      name: 'Sarah Johnson',
-      email: 'sarah@example.com',
-      company: 'XYZ Ltd',
-      status: 'contacted',
-      source: 'Referral',
-      dateAdded: '2023-06-20'
-    },
-    {
-      id: 3,
-      name: 'Michael Brown',
-      email: 'michael@example.com',
-      company: 'Tech Inc',
-      status: 'qualified',
-      source: 'Trade Show',
-      dateAdded: '2023-07-10'
-    },
-    {
-      id: 4,
-      name: 'Emily Davis',
-      email: 'emily@example.com',
-      company: 'Innovate Co',
-      status: 'lost',
-      source: 'Social Media',
-      dateAdded: '2023-07-22'
-    }
-  ];
-  
-  loading.value = false;
-});
-
-const updateStatus = (leadId: number, newStatus: 'new' | 'contacted' | 'qualified' | 'lost') => {
-  const lead = leads.value.find(l => l.id === leadId);
-  if (lead) {
-    lead.status = newStatus;
-  }
-};
-</script>
-
-<style scoped>
-.leads {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.loading {
-  text-align: center;
-  font-size: 18px;
-  margin-top: 50px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-.status {
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: white;
-  font-size: 0.8em;
-}
-
-.status.new {
-  background-color: #42b983;
-}
-
-.status.contacted {
-  background-color: #6baeff;
-}
-
-.status.qualified {
-  background-color: #ffa500;
-}
-
-.status.lost {
-  background-color: #e74c3c;
-}
-
-select {
-  padding: 4px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
 }
 </style>

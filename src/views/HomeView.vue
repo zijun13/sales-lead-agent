@@ -42,7 +42,7 @@
     <section class="quick-actions">
       <button class="action-btn" @click="generateSalesTalk('new_lead')">新线索跟进</button>
       <button class="action-btn" @click="generateSalesTalk('follow_up')">客户回访</button>
-      <button class="action-btn" @click="generateSalesTalk('opportunity')">商机挖掘')</button>
+      <button class="action-btn" @click="generateSalesTalk('opportunity')">商机挖掘</button>
       <button class="action-btn" @click="generateSalesTalk('renewal')">合同续签</button>
     </section>
 
@@ -68,7 +68,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 
 interface Message {
   type: string
@@ -91,17 +90,16 @@ const goTo = (path: string) => {
   router.push(path)
 }
 
+// 模拟获取仪表板数据
 const fetchDashboardData = async () => {
-  try {
-    const response = await axios.get('/api/dashboard/stats')
-    leadsCount.value = response.data.leadsCount
-    customersCount.value = response.data.customersCount
-    conversionRate.value = response.data.conversionRate
-    revenue.value = response.data.revenue
-  } catch (error) {
-    console.error('Failed to fetch dashboard data:', error)
-    // Fallback to default values or handle error UI
-  }
+  // 模拟API调用延迟
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // 使用模拟数据
+  leadsCount.value = 24
+  customersCount.value = 42
+  conversionRate.value = 68
+  revenue.value = '1,240,000'
 }
 
 const generateSalesTalk = async (type: string) => {
@@ -109,18 +107,30 @@ const generateSalesTalk = async (type: string) => {
     // 添加用户消息
     messages.value.push({ type: 'user', content: `生成${type}话术` })
     
-    // 调用后端API
-    const response = await axios.post('/api/generate-talk', {
-      lead_type: type,
-      customer_profile: {
-        company: '示例公司',
-        industry: '科技行业',
-        contact_name: '客户'
-      }
-    })
+    // 模拟API调用延迟
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    // 根据类型生成不同的话术
+    let talk = '';
+    switch(type) {
+      case 'new_lead':
+        talk = '您好！我是来自[公司名称]的[姓名]。了解到贵公司在[相关领域]有需求，我们之前为类似客户提供了[解决方案]，效果显著。是否方便安排时间详细沟通一下贵公司的具体需求？';
+        break;
+      case 'follow_up':
+        talk = '您好！上次沟通后，我想跟进一下您对我们方案的看法。针对您提到的[具体需求点]，我们做了进一步优化，希望能更好地满足您的业务场景。';
+        break;
+      case 'opportunity':
+        talk = '基于我们前期的交流，我发现贵公司有[具体业务痛点]的需求，我们的产品正好解决了这一问题。我们有几个成功的案例可以参考，效果都很不错。';
+        break;
+      case 'renewal':
+        talk = '您好！您的服务即将到期，我们希望能继续为您提供支持。在过去的合作中，我们的服务为您节省了[具体收益]，续约还能享受[优惠政策]。';
+        break;
+      default:
+        talk = '这是根据客户需求定制的销售话术，旨在有效促进沟通并达成合作意向。';
+    }
     
     // 显示从AI获得的回复
-    messages.value.push({ type: 'assistant', content: response.data.talk })
+    messages.value.push({ type: 'assistant', content: talk })
   } catch (error) {
     console.error('Error generating sales talk:', error)
     messages.value.push({ 
@@ -321,212 +331,5 @@ onMounted(() => {
   border: none;
   border-radius: 25px;
   cursor: pointer;
-}
-</style>
-```
-
-```
-<template>
-  <div class="home">
-    <h1>Sales Lead Dashboard</h1>
-    
-    <div class="add-lead-form">
-      <h2>Add New Lead</h2>
-      <form @submit.prevent="addLead">
-        <div class="form-group">
-          <label for="name">Name:</label>
-          <input type="text" id="name" v-model="newLead.name" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" v-model="newLead.email" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="company">Company:</label>
-          <input type="text" id="company" v-model="newLead.company" required>
-        </div>
-        
-        <button type="submit" :disabled="loading">
-          {{ loading ? 'Adding...' : 'Add Lead' }}
-        </button>
-      </form>
-      
-      <p v-if="message" class="message">{{ message }}</p>
-    </div>
-    
-    <div class="leads-list">
-      <h2>Recent Leads</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Company</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="lead in leads" :key="lead.id">
-            <td>{{ lead.id }}</td>
-            <td>{{ lead.name }}</td>
-            <td>{{ lead.email }}</td>
-            <td>{{ lead.company }}</td>
-            <td><span class="status" :class="lead.status">{{ lead.status }}</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-
-interface Lead {
-  id: number;
-  name: string;
-  email: string;
-  company: string;
-  status: 'new' | 'contacted' | 'qualified' | 'lost';
-}
-
-const leads = ref<Lead[]>([
-  { id: 1, name: 'John Smith', email: 'john@example.com', company: 'ABC Corp', status: 'new' },
-  { id: 2, name: 'Sarah Johnson', email: 'sarah@example.com', company: 'XYZ Ltd', status: 'contacted' },
-  { id: 3, name: 'Michael Brown', email: 'michael@example.com', company: 'Tech Inc', status: 'qualified' },
-]);
-
-const newLead = ref({
-  name: '',
-  email: '',
-  company: ''
-});
-
-const loading = ref(false);
-const message = ref('');
-
-const addLead = async () => {
-  if (!newLead.value.name || !newLead.value.email || !newLead.value.company) {
-    message.value = 'Please fill in all fields';
-    return;
-  }
-
-  loading.value = true;
-  
-  // 模拟 API 调用延迟
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // 添加新潜在客户到列表
-  const lead: Lead = {
-    id: leads.value.length + 1,
-    name: newLead.value.name,
-    email: newLead.value.email,
-    company: newLead.value.company,
-    status: 'new'
-  };
-  
-  leads.value.push(lead);
-  
-  // 重置表单
-  newLead.value = { name: '', email: '', company: '' };
-  message.value = 'Lead added successfully!';
-  loading.value = false;
-};
-</script>
-
-<style scoped>
-.home {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.add-lead-form {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: #42b983;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.message {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #dff0d8;
-  color: #3c763d;
-  border-radius: 4px;
-}
-
-.leads-list table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.leads-list th,
-.leads-list td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.leads-list th {
-  background-color: #f2f2f2;
-}
-
-.status {
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: white;
-  font-size: 0.8em;
-}
-
-.status.new {
-  background-color: #42b983;
-}
-
-.status.contacted {
-  background-color: #6baeff;
-}
-
-.status.qualified {
-  background-color: #ffa500;
-}
-
-.status.lost {
-  background-color: #e74c3c;
 }
 </style>
